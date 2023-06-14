@@ -33,6 +33,20 @@ class TokenType(Enum):
     LET = "LET"
 
 
+KEYWORDS: dict[str, TokenType] = {
+    "fn": TokenType.FUNCTION,
+    "let": TokenType.LET,
+}
+
+
+def get_ident_type(ident: str) -> TokenType:
+    """
+    Find the identifier in the KEYWORDS constant, if there is
+    no identifier, return TokenType.IDENTIFIER.
+    """
+    return KEYWORDS.get(ident, TokenType.IDENTIFIER)
+
+
 class Token:
     def __init__(self, token_type: TokenType, literal: str) -> None:
         self.token_type = token_type

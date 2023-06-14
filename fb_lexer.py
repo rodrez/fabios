@@ -1,5 +1,5 @@
 from typing import Any
-from .fb_token import Token, TokenType
+from .fb_token import Token, TokenType, get_ident_type
 
 
 class Lexer:
@@ -44,6 +44,9 @@ class Lexer:
 
     def next_token(self) -> Token:
         token: Token = Token(TokenType.EOF, "")
+
+        self.skip_white_space()
+
         match self.char:
             case "=":
                 token = Token(TokenType.ASSIGN, self.char)
@@ -63,6 +66,29 @@ class Lexer:
                 token = Token(TokenType.PLUS, self.char)
             case 0:
                 token = Token(TokenType.EOF, "")
+            case _:
+                breakpoint()
+                if self.is_letter():
+                    token_type = get_ident_type(self.char)
+                    literal = self.read_identifier()
+                    token = Token(token_type, literal)
+                    return token
+                else:
+                    token = Token(TokenType.ILLEGAL, self.char)
 
         self.read_char()
         return token
+
+    def is_letter(self) -> bool:
+        return self.char.isalpha() or self.char == "_"
+
+    def skip_white_space(self):
+        char = self.char
+        if char == " " or char == "\t" or char == "\n" or char == "\r":
+            self.read_char()
+
+    def read_identifier(self):
+        position = self.position
+        while self.is_letter():
+            self.read_char()
+        return self.source_code[position : self.position]

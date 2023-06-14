@@ -6,24 +6,59 @@ import unittest
 class TestLexerNextToken(unittest.TestCase):
     def test_next_token(self):
         token_types = [
+            (TokenType.LET, "let"),
+            (TokenType.IDENTIFIER, "five"),
             (TokenType.ASSIGN, "="),
-            (TokenType.PLUS, "+"),
+            (TokenType.INT, "10"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.LET, "let"),
+            (TokenType.IDENTIFIER, "ten"),
+            (TokenType.ASSIGN, "="),
+            (TokenType.INT, "10"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.LET, "let"),
+            (TokenType.IDENTIFIER, "add"),
+            (TokenType.ASSIGN, "="),
+            (TokenType.FUNCTION, "fn"),
             (TokenType.LPAREN, "("),
+            (TokenType.IDENTIFIER, "x"),
+            (TokenType.COMMA, ","),
+            (TokenType.IDENTIFIER, "y"),
             (TokenType.RPAREN, ")"),
             (TokenType.LBRACE, "{"),
+            (TokenType.IDENTIFIER, "x"),
+            (TokenType.PLUS, "+"),
+            (TokenType.IDENTIFIER, "y"),
             (TokenType.RBRACE, "}"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.LET, "let"),
+            (TokenType.IDENTIFIER, "result"),
+            (TokenType.ASSIGN, "="),
+            (TokenType.IDENTIFIER, "add"),
+            (TokenType.LPAREN, "("),
+            (TokenType.IDENTIFIER, "five"),
             (TokenType.COMMA, ","),
+            (TokenType.IDENTIFIER, "ten"),
+            (TokenType.RPAREN, ")"),
             (TokenType.SEMICOLON, ";"),
         ]
 
-        source_code = "=+(){},;"
+        source_code = """
+        let five = 5;
+        let ten = 10;
+
+        let add = fn(x,y) {
+            x + y
+        };
+
+        let result = add(five, ten);
+        """
 
         lexer = Lexer(source_code)
         for tok in token_types:
             lt = lexer.next_token()
 
             expected_type, expected_literal = tok
-
             self.assertEqual(
                 lt.token_type,
                 expected_type,
