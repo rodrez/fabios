@@ -1,28 +1,16 @@
 from typing import Any
-from .fb_token import Token, TokenType, get_ident_type
+from fb_token import Token, TokenType, get_ident_type
 
 
 class Lexer:
     char: Any
     position: int = 0
-    readPosition: int = 1
+    read_position: int = 1
 
     def __init__(
         self,
         source_code: str,
     ):
-        """
-        Parameters
-        ----------
-        input
-            Source code
-        position
-            Current position in the source code
-        readPosition
-            Character after current
-        character
-            Current character
-        """
         self.source_code = source_code
         self.char = source_code[0]
 
@@ -33,18 +21,18 @@ class Lexer:
         we update the position to the read char, and increase"""
 
         # Checks if we reached the end of the input (source code)
-        if self.readPosition >= len(self.source_code):
+        if self.read_position >= len(self.source_code):
             # We set this to 0 which is the ASCII code for NUL
             self.char = 0
         else:
-            self.char = self.source_code[self.readPosition]
+            self.char = self.source_code[self.read_position]
 
-        self.position = self.readPosition
-        self.readPosition += 1
+        self.position = self.read_position
+        self.read_position += 1
 
     def next_token(self) -> Token:
-        token: Token = Token(TokenType.EOF, "")
-
+        token: Token
+        print("self.char: ", self.char)
         self.skip_white_space()
 
         match self.char:
@@ -67,11 +55,16 @@ class Lexer:
             case 0:
                 token = Token(TokenType.EOF, "")
             case _:
-                breakpoint()
                 if self.is_letter():
-                    token_type = get_ident_type(self.char)
+                    # Pretty self explanatory we first read the read_identifier
+                    # then we get the type of the identifier and lastly,
+                    # we create the token
                     literal = self.read_identifier()
+                    token_type = get_ident_type(literal)
                     token = Token(token_type, literal)
+                    return token
+                elif self.char.isdigit():
+                    token = Token(TokenType.INT, self.read_number())
                     return token
                 else:
                     token = Token(TokenType.ILLEGAL, self.char)
@@ -79,16 +72,36 @@ class Lexer:
         self.read_char()
         return token
 
-    def is_letter(self) -> bool:
-        return self.char.isalpha() or self.char == "_"
+    def skip_white_space(self) -> None:
+        """
+        Check if `self.char` is a white space includes \t \n \r and " ".
 
-    def skip_white_space(self):
-        char = self.char
-        if char == " " or char == "\t" or char == "\n" or char == "\r":
+        Note: Because I'm dumb I used an if statement instead of a while
+        loop so it caused some issues.
+        """
+        while self.char and self.char.isspace():
             self.read_char()
 
     def read_identifier(self):
+        """
+        It loops through all consecutive letters, once there loop breaks
+        we return the string of letters
+        """
+        # Starting position before the loops starts
         position = self.position
         while self.is_letter():
+            # Since read char updates `self.position` we can use a combo of
+            # the starting position and the `self.position` to get the word
             self.read_char()
         return self.source_code[position : self.position]
+
+    def read_number(self):
+        position = self.position
+
+        while self.char.isdigit():
+            self.read_char()
+
+        return self.source_code[position : self.position]
+
+    def is_letter(self) -> bool:
+        return self.char.isalpha() or self.char == "_"
