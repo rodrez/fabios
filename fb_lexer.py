@@ -64,6 +64,16 @@ class Lexer:
                 token = Token(TokenType.COMMA, self.char)
             case "+":
                 token = Token(TokenType.PLUS, self.char)
+            case "-":
+                token = Token(TokenType.MINUS, self.char)
+            case "/":
+                token = Token(TokenType.SLASH, self.char)
+            case "<":
+                token = Token(TokenType.LT, self.char)
+            case ">":
+                token = Token(TokenType.GT, self.char)
+            case "!":
+                token = Token(TokenType.BANG, self.char)
             case 0:
                 token = Token(TokenType.EOF, "")
             case _:

@@ -17,6 +17,12 @@ class TokenType(Enum):
     # Operators
     ASSIGN = "="
     PLUS = "+"
+    MINUS = "-"
+    BANG = "!"
+    ASTERISK = "*"
+    SLASH = "/"
+    LT = "<"
+    GT = ">"
 
     # Delimeters
     COMMA = ","
