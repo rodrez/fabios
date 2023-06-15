@@ -1,6 +1,8 @@
 from typing import Any
 from fb_token import Token, TokenType, get_ident_type
 
+__all__ = ["Lexer"]
+
 
 class Lexer:
     char: Any
@@ -14,7 +16,7 @@ class Lexer:
         self.source_code = source_code
         self.char = source_code[0]
 
-    def read_char(self):
+    def read_char(self) -> None:
         """We check the next character to ensure we didn't reached
         reach the end of the file, if we reach the eof we set the
         char to 0, otherwise we set the char to the read char. Then,
@@ -30,14 +32,36 @@ class Lexer:
         self.position = self.read_position
         self.read_position += 1
 
+    def peek_char(self) -> str | int:
+        """Peeks at the next character"""
+        if self.read_position >= len(self.source_code):
+            return 0
+        return self.source_code[self.read_position]
+
     def next_token(self) -> Token:
+        """Handles the logic of creating the tokes based on self.char"""
         token: Token
-        print("self.char: ", self.char)
         self.skip_white_space()
 
         match self.char:
             case "=":
-                token = Token(TokenType.ASSIGN, self.char)
+                # Looks ahead to se if there is another = if so then it must be an
+                # TokenType.EQ token, otherwise we simple return the singular `=`
+                if self.peek_char() == "=":
+                    ch = self.char
+                    self.read_char()
+                    literal = ch + self.char
+                    token = Token(TokenType.EQ, literal)
+                else:
+                    token = Token(TokenType.ASSIGN, self.char)
+            case "!":
+                if self.peek_char() == "=":
+                    ch = self.char
+                    self.read_char()
+                    literal = ch + self.char
+                    token = Token(TokenType.NOT_EQ, literal)
+                else:
+                    token = Token(TokenType.BANG, self.char)
             case ";":
                 token = Token(TokenType.SEMICOLON, self.char)
             case "(":
@@ -54,14 +78,14 @@ class Lexer:
                 token = Token(TokenType.PLUS, self.char)
             case "-":
                 token = Token(TokenType.MINUS, self.char)
+            case "*":
+                token = Token(TokenType.ASTERISK, self.char)
             case "/":
                 token = Token(TokenType.SLASH, self.char)
             case "<":
                 token = Token(TokenType.LT, self.char)
             case ">":
                 token = Token(TokenType.GT, self.char)
-            case "!":
-                token = Token(TokenType.BANG, self.char)
             case 0:
                 token = Token(TokenType.EOF, "")
             case _:

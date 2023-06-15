@@ -42,6 +42,41 @@ class TestLexerNextToken(unittest.TestCase):
             (TokenType.IDENTIFIER, "ten"),
             (TokenType.RPAREN, ")"),
             (TokenType.SEMICOLON, ";"),
+            (TokenType.BANG, "!"),
+            (TokenType.MINUS, "-"),
+            (TokenType.SLASH, "/"),
+            (TokenType.ASTERISK, "*"),
+            (TokenType.INT, "5"),
+            (TokenType.INT, "5"),
+            (TokenType.LT, "<"),
+            (TokenType.INT, "10"),
+            (TokenType.GT, ">"),
+            (TokenType.INT, "5"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.IF, "if"),
+            (TokenType.LPAREN, "("),
+            (TokenType.INT, "5"),
+            (TokenType.LT, "<"),
+            (TokenType.INT, "10"),
+            (TokenType.RPAREN, ")"),
+            (TokenType.LBRACE, "{"),
+            (TokenType.RETURN, "return"),
+            (TokenType.TRUE, "true"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.RBRACE, "}"),
+            (TokenType.ELSE, "else"),
+            (TokenType.LBRACE, "{"),
+            (TokenType.RETURN, "return"),
+            (TokenType.FALSE, "false"),
+            (TokenType.SEMICOLON, ";"),
+            (TokenType.RBRACE, "}"),
+            #
+            (TokenType.INT, "10"),
+            (TokenType.EQ, "=="),
+            (TokenType.INT, "10"),
+            (TokenType.INT, "10"),
+            (TokenType.NOT_EQ, "!="),
+            (TokenType.INT, "10"),
         ]
 
         source_code = """
@@ -57,6 +92,14 @@ let five = 5;
         !-/*5
         5 < 10  > 5;
 
+        if (5 < 10){
+            return true;
+        } else {
+            return false;
+        }
+
+        10 == 10
+        10 != 10
         """
 
         lexer = Lexer(source_code)
@@ -64,8 +107,6 @@ let five = 5;
             lt = lexer.next_token()
 
             expected_type, expected_literal = tok
-            print("TokenType: ", lt.token_type)
-            print("Literal: ", lt.literal)
             self.assertEqual(
                 lt.token_type,
                 expected_type,

@@ -5,6 +5,8 @@ This file holds everything related to the Token. We can create new TokenTypes
 by simply adding the to our `TokenTyp` enum.
 """
 
+__all__ = ["TokenType", "Token", "get_ident_type"]
+
 
 class TokenType(Enum):
     ILLEGAL = "ILLEGAL"
@@ -24,6 +26,9 @@ class TokenType(Enum):
     LT = "<"
     GT = ">"
 
+    EQ = "=="
+    NOT_EQ = "!="
+
     # Delimeters
     COMMA = ","
     SEMICOLON = ";"
@@ -34,14 +39,23 @@ class TokenType(Enum):
     RBRACE = "}"
 
     # Keywords
-
     FUNCTION = "FUNCTION"
     LET = "LET"
+    IF = "IF"
+    ELSE = "ELSE"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    RETURN = "RETURN"
 
 
 KEYWORDS: dict[str, TokenType] = {
     "fn": TokenType.FUNCTION,
     "let": TokenType.LET,
+    "if": TokenType.IF,
+    "else": TokenType.ELSE,
+    "true": TokenType.TRUE,
+    "false": TokenType.FALSE,
+    "return": TokenType.RETURN,
 }
 
 
