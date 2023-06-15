@@ -1,6 +1,7 @@
-from ..fb_token import TokenType
-from ..fb_lexer import Lexer
 import unittest
+
+from fb_lexer import Lexer
+from fb_token import TokenType
 
 
 class TestLexerNextToken(unittest.TestCase):
@@ -9,7 +10,7 @@ class TestLexerNextToken(unittest.TestCase):
             (TokenType.LET, "let"),
             (TokenType.IDENTIFIER, "five"),
             (TokenType.ASSIGN, "="),
-            (TokenType.INT, "10"),
+            (TokenType.INT, "5"),
             (TokenType.SEMICOLON, ";"),
             (TokenType.LET, "let"),
             (TokenType.IDENTIFIER, "ten"),
@@ -44,7 +45,7 @@ class TestLexerNextToken(unittest.TestCase):
         ]
 
         source_code = """
-        let five = 5;
+let five = 5;
         let ten = 10;
 
         let add = fn(x,y) {
@@ -63,6 +64,8 @@ class TestLexerNextToken(unittest.TestCase):
             lt = lexer.next_token()
 
             expected_type, expected_literal = tok
+            print("TokenType: ", lt.token_type)
+            print("Literal: ", lt.literal)
             self.assertEqual(
                 lt.token_type,
                 expected_type,
