@@ -1,5 +1,5 @@
 from typing import Any
-from mtoken import Token, TokenType, get_ident_type
+from ftoken import Token, TokenType, get_ident_type
 
 __all__ = ["Lexer"]
 
@@ -127,7 +127,7 @@ class Lexer:
             # Since read char updates `self.position` we can use a combo of
             # the starting position and the `self.position` to get the word
             self.read_char()
-        return self.source_code[position: self.position]
+        return self.source_code[position : self.position]
 
     def read_number(self):
         position = self.position
@@ -135,7 +135,7 @@ class Lexer:
         while self.char.isdigit():
             self.read_char()
 
-        return self.source_code[position: self.position]
+        return self.source_code[position : self.position]
 
     def is_letter(self) -> bool:
         return self.char.isalpha() or self.char == "_"

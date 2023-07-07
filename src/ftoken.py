@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 """
@@ -71,3 +72,6 @@ class Token:
     def __init__(self, token_type: TokenType, literal: str) -> None:
         self.token_type = token_type
         self.literal = literal
+
+    def __str__(self) -> str:
+        return f"Type: {self.token_type}".ljust(30) + f"Literal: {self.literal}"
