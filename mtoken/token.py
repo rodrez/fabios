@@ -29,7 +29,7 @@ class TokenType(Enum):
     EQ = "=="
     NOT_EQ = "!="
 
-    # Delimeters
+    # Delimiters
     COMMA = ","
     SEMICOLON = ";"
 

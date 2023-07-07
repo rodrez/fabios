@@ -1,7 +1,7 @@
 import unittest
 
-from fb_lexer import Lexer
-from fb_token import TokenType
+from mlexer import Lexer
+from mtoken import TokenType
 
 
 class TestLexerNextToken(unittest.TestCase):
